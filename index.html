@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Contact</title>
+  <style>
+    body {
+      background: #eaf6ff;
+      margin: 0;
+      font-family: Calibri, sans-serif;
+    }
+
+    .wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 20px;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+
+    .card {
+      background: url('card_texture_linen.jpg');
+      background-size: cover;
+      width: 95%;
+      max-width: 680px;
+      padding: 50px;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.38);
+      border-radius: 10px;
+      box-sizing: border-box;
+    }
+
+    .eagle {
+      display: block;
+      margin: 40px auto 30px;
+      max-width: 120px;
+    }
+
+    .name {
+      text-align: center;
+      font-family: Copperplate, serif;
+      font-size: 3.5em;
+      font-weight: bold;
+      letter-spacing: 1px;
+      margin: 0 0 30px;
+    }
+
+    #contactLabel {
+      text-align: center;
+      font-size: 2.25em;
+      font-style: italic;
+      letter-spacing: 0.06em;
+      margin: 40px 0 30px;
+    }
+
+    label {
+      display: block;
+      margin: 20px 0 8px;
+      font-size: 1.5em;
+    }
+
+    .required {
+      color: red;
+      margin-left: 6px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 16px;
+      font-size: 0.72em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    .counter {
+      text-align: right;
+      font-size: 0.56em;
+      color: #555;
+      margin-top: 6px;
+    }
+
+    button {
+      display: block;
+      margin: 40px auto 50px;
+      padding: 24px 40px;
+      font-size: 1.5em;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    input:invalid, textarea:invalid {
+      box-shadow: none;
+    }
+
+    input:invalid:focus, textarea:invalid:focus {
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="card">
+      <img src="eagle_highres.png" alt="Eagle" class="eagle" />
+      <div class="name" id="name"></div>
+      <div id="contactLabel">Contact</div>
+      <form id="contact-form" action="https://formspree.io/f/mqalgorr" method="POST" novalidate>
+        <label>Name<span class="required">*</span>
+          <input type="text" name="name" required oninvalid="this.setCustomValidity('Please fill out this field.')" oninput="this.setCustomValidity('')"/>
+        </label>
+
+        <label>E-mail<span class="required">*</span>
+          <input type="email" name="email" id="email" required oninvalid="this.setCustomValidity('Please fill out this field.')" oninput="this.setCustomValidity('')" />
+        </label>
+
+        <label>E-mail (confirm)<span class="required">*</span>
+          <input type="email" id="confirmEmail" required oninvalid="this.setCustomValidity('Please fill out this field.')" oninput="this.setCustomValidity('')" />
+        </label>
+
+        <label>Subject<span class="required">*</span>
+          <input type="text" name="subject" required oninvalid="this.setCustomValidity('Please fill out this field.')" oninput="this.setCustomValidity('')" />
+        </label>
+
+        <label>Message<span class="required">*</span>
+          <textarea name="message" id="message" rows="6" maxlength="2000" required oninvalid="this.setCustomValidity('Please fill out this field.')" oninput="this.setCustomValidity('')"></textarea>
+        </label>
+
+        <div class="counter" id="counter">0/2000</div>
+
+        <button type="submit" id="submitButton">SUBMIT</button>
+      </form>
+      <div class="hidden" id="thankYou">Message sent. Thank you.</div>
+    </div>
+  </div>
+
+  <script>
+    // Reveal name safely
+    document.getElementById("name").innerText = "David Wagner";
+
+    const form = document.getElementById("contact-form");
+    const email = document.getElementById("email");
+    const confirmEmail = document.getElementById("confirmEmail");
+    const submitButton = document.getElementById("submitButton");
+    const thankYou = document.getElementById("thankYou");
+    const message = document.getElementById("message");
+    const counter = document.getElementById("counter");
+
+    form.addEventListener("submit", function (e) {
+      if (email.value !== confirmEmail.value) {
+        e.preventDefault();
+        alert("Email addresses do not match.");
+        return;
+      }
+
+      // Prevent rapid resubmissions
+      submitButton.disabled = true;
+      submitButton.innerText = "Please wait...";
+      setTimeout(() => {
+        submitButton.disabled = false;
+        submitButton.innerText = "SUBMIT";
+      }, 30000);
+
+      thankYou.classList.remove("hidden");
+    });
+
+    message.addEventListener("input", () => {
+      counter.innerText = `${message.value.length}/2000`;
+    });
+  </script>
+</body>
+</html>
